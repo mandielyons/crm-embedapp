@@ -1,0 +1,1032 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Default"
+	>
+	<DefaultRequestParams
+		CRMAccount=""
+		Maint=""
+		StatusMsg=""
+	/>
+	<LocalData>
+		<DataLayer
+			ConnectionID="connCRMData"
+			ID="dlCustomerBusiness"
+			Source="Select mkcCropForecastAcres.ProdRptCatDesc,
+  mkcCropForecastAcres.CropYear,
+  mkcCropForecastAcres.Acres,
+  mkcCropForecastAcres.AccountId
+From mkcCropForecastAcres
+Where mkcCropForecastAcres.CropYear = Year(GetDate()) And
+  mkcCropForecastAcres.AccountId = &apos;@Request.CRMAccount~&apos;"
+			Type="SQL"
+			>
+			<CrosstabFilter
+				CrosstabColumn="ProdRptCatDesc"
+				CrosstabLabelColumn="CropYear"
+				CrosstabValueColumn="Acres"
+				CrosstabValueFunction="Sum"
+			/>
+			<CalculatedColumn
+				Formula="Year(&quot;@Function.Date~&quot;)"
+				ID="cYear"
+			/>
+			<CalculatedColumn
+				Formula="Month(&quot;@Function.Date~&quot;)"
+				ID="cMonth"
+			/>
+		</DataLayer>
+	</LocalData>
+	<Body>
+		<PopupPanel
+			HideCloseX="False"
+			ID="panelAddAcres"
+			PopupModal="True"
+			PopupPanelLocation="Center"
+			ShowOnPageLoad="False"
+			Width="50"
+			WidthScale="%"
+			>
+			<ResponsiveRow>
+				<ResponsiveColumn
+					ColspanExtraSmallScreen="12"
+					ColspanLargeScreen="12"
+					ColspanMediumScreen="12"
+					ColspanSmallScreen="12"
+					>
+					<Division
+						Class="panel panel-default"
+						HtmlDiv="True"
+						ID="panel-add"
+						>
+						<Division
+							Class="panel-heading"
+							HtmlDiv="True"
+							ID="panel-add-header"
+							>
+							<Label
+								Caption="Add Customer Acres"
+								Class="panel-title ThemeBold"
+							/>
+						</Division>
+						<Division
+							Class="panel-body ThemeTextSmall"
+							HtmlDiv="True"
+							ID="panel-add-body"
+							>
+							<ResponsiveRow>
+								<ResponsiveColumn
+									Class="ThemeAlignLeft"
+									ColspanExtraSmallScreen="4"
+									ColspanLargeScreen="3"
+									ColspanMediumScreen="3"
+									ColspanSmallScreen="4"
+									>
+									<Label
+										Caption="Crop Year: "
+										Class="bold"
+									/>
+									<LineBreak
+										LineCount="2"
+									/>
+								</ResponsiveColumn>
+								<ResponsiveColumn
+									ColspanExtraSmallScreen="4"
+									ColspanLargeScreen="3"
+									ColspanMediumScreen="3"
+									ColspanSmallScreen="4"
+									>
+									<InputSelectList
+										ID="newCropYear"
+										OptionCaptionColumn="CropYear"
+										OptionValueColumn="CropYear"
+										>
+										<DataLayer
+											ConnectionID="connCRMData"
+											ID="dlCropYear"
+											Source="Select Distinct mkcCropForecastAcres.CropYear
+From mkcCropForecastAcres 
+Order By CropYear DESC"
+											Type="SQL"
+											>
+											<ConditionFilter
+												Condition="@Data.CropYear~ &gt; @Data.CropYear~ - 5 "
+											/>
+										</DataLayer>
+									</InputSelectList>
+									<LineBreak
+										LineCount="2"
+									/>
+								</ResponsiveColumn>
+								<ResponsiveColumn/>
+							</ResponsiveRow>
+							<ResponsiveRow>
+								<ResponsiveColumn
+									ColspanExtraSmallScreen="4"
+									ColspanLargeScreen="3"
+									ColspanMediumScreen="3"
+									ColspanSmallScreen="4"
+									>
+									<Label
+										Caption="Crop Name: "
+										Class="bold"
+									/>
+									<LineBreak
+										LineCount="2"
+									/>
+								</ResponsiveColumn>
+								<ResponsiveColumn
+									ColspanExtraSmallScreen="4"
+									ColspanLargeScreen="3"
+									ColspanMediumScreen="3"
+									ColspanSmallScreen="4"
+									>
+									<InputSelectList
+										DefaultValue="@Request.CropName~"
+										ID="selCropName"
+										IncludeBlankCaption="Select a crop name"
+										OptionCaptionColumn="CropName"
+										OptionTooltipColumn="Select a ticket range"
+										OptionValueColumn="CropName"
+										>
+										<Note
+											Note="&lt;!--Get appropriate data for this select--&gt;"
+										/>
+										<DataLayer
+											ConnectionID="connCRMData"
+											ID="dlCropName"
+											Source="Select Distinct mkcCropForecastAcres.CropName
+From mkcCropForecastAcres 
+Order By CropName ASC"
+											Type="SQL"
+										/>
+										<Validation
+											Class="ThemeErrorText"
+											Type="Required"
+										/>
+									</InputSelectList>
+									<LineBreak
+										LineCount="2"
+									/>
+								</ResponsiveColumn>
+								<ResponsiveColumn/>
+							</ResponsiveRow>
+							<ResponsiveRow>
+								<ResponsiveColumn
+									ColspanExtraSmallScreen="4"
+									ColspanLargeScreen="3"
+									ColspanMediumScreen="3"
+									ColspanSmallScreen="4"
+									>
+									<Label
+										Caption="Crop Type: "
+										Class="bold"
+									/>
+									<LineBreak
+										LineCount="2"
+									/>
+								</ResponsiveColumn>
+								<ResponsiveColumn
+									ColspanExtraSmallScreen="4"
+									ColspanLargeScreen="3"
+									ColspanMediumScreen="3"
+									ColspanSmallScreen="4"
+									>
+									<InputSelectList
+										DefaultValue="@Request.CropType~"
+										ID="selCropType"
+										IncludeBlank="False"
+										IncludeBlankCaption="Select a crop type"
+										OptionCaptionColumn="CropType"
+										OptionTooltipColumn="Select a ticket range"
+										OptionValueColumn="CropType"
+										>
+										<Note
+											Note="&lt;!--Get appropriate data for this select--&gt;"
+										/>
+										<DataLayer
+											ConnectionID="connCRMData"
+											ID="dlCropType"
+											Source="Select Distinct mkcCropForecastAcres.CropType
+From mkcCropForecastAcres 
+Order By CropType ASC"
+											Type="SQL"
+										/>
+										<Validation
+											Class="ThemeErrorText"
+											Type="Required"
+										/>
+									</InputSelectList>
+									<LineBreak
+										LineCount="2"
+									/>
+								</ResponsiveColumn>
+								<ResponsiveColumn/>
+							</ResponsiveRow>
+							<ResponsiveRow>
+								<ResponsiveColumn
+									Class="ThemeAlignLeft"
+									ColspanExtraSmallScreen="6"
+									ColspanLargeScreen="3"
+									ColspanMediumScreen="3"
+									ColspanSmallScreen="6"
+									>
+									<Label
+										Caption="Crop Acres: "
+										Class="bold"
+									/>
+									<LineBreak
+										LineCount="2"
+									/>
+								</ResponsiveColumn>
+								<ResponsiveColumn
+									ColspanExtraSmallScreen="4"
+									ColspanLargeScreen="3"
+									ColspanMediumScreen="3"
+									ColspanSmallScreen="4"
+									>
+									<InputText
+										Class="ThemeAlignRight"
+										DefaultValue="@Request.Acres~"
+										Format="General Number"
+										ID="iptAcres"
+										Tooltip="Enter the number of acres"
+										>
+										<Validation
+											Class="ThemeErrorText"
+											Type="Required"
+										/>
+									</InputText>
+									<LineBreak
+										LineCount="2"
+									/>
+								</ResponsiveColumn>
+								<ResponsiveColumn/>
+							</ResponsiveRow>
+							<ResponsiveRow>
+								<ResponsiveColumn
+									Class="ThemeAlignLeft"
+									ColspanExtraSmallScreen="12"
+									ColspanLargeScreen="12"
+									ColspanMediumScreen="12"
+									ColspanSmallScreen="12"
+									>
+									<InputText
+										Class="ThemeHidden"
+										DefaultValue="@Request.CRMAccount~"
+										ID="iptAccountId"
+									/>
+									<Button
+										Caption="Save"
+										ID="btnAdd"
+										>
+										<Note
+											Note="&lt;!--Add Action.Process here--&gt;"
+										/>
+										<Action
+											ID="procAdd"
+											Process="SQLTasks"
+											TaskID="insertRow"
+											Type="Process"
+											>
+											<WaitPage/>
+											<LinkParams/>
+										</Action>
+									</Button>
+									<Spaces
+										Size="15"
+									/>
+									<Button
+										Caption="Cancel"
+										ID="btnCancel"
+										>
+										<Remark>
+											<Action
+												ConfirmMessage="Changes will be lost. Continue without saving?"
+												ID="refreshReport"
+												Type="Report"
+												Validate="True"
+												>
+												<Target
+													Report="Default"
+													Type="Report"
+													>
+													<WaitPage/>
+												</Target>
+											</Action>
+										</Remark>
+										<Action
+											Display="Hide"
+											ElementID="panelAddAcres"
+											ID="hideAddPanel"
+											Type="ShowElement"
+										/>
+									</Button>
+								</ResponsiveColumn>
+							</ResponsiveRow>
+						</Division>
+					</Division>
+				</ResponsiveColumn>
+			</ResponsiveRow>
+		</PopupPanel>
+		<ResponsiveRow>
+			<ResponsiveColumn>
+				<Division
+					Class="panel panel-default"
+					HtmlDiv="True"
+					ID="panel"
+					>
+					<Division
+						Class="panel-heading"
+						HtmlDiv="True"
+						ID="panel-header"
+						>
+						<Label
+							Caption="Customer Acres &amp; Crop Year Totals"
+							Class="panel-title"
+						/>
+						<IncludeHtml
+							Html="&lt;span class=&quot;pull-right&quot;&gt;
+	&lt;a href=&quot;#panel-body&quot; data-toggle=&quot;collapse&quot; class=&quot;title&quot;&gt;&lt;i class=&quot;fa fa-chevron-down&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+&lt;/span&gt;"
+						/>
+					</Division>
+					<Division
+						Class="collapse in panel-body"
+						HtmlDiv="True"
+						ID="panel-body"
+						>
+						<ResponsiveRow>
+							<ResponsiveColumn
+								ColspanExtraSmallScreen="6"
+								ColspanLargeScreen="3"
+								ColspanMediumScreen="3"
+								ColspanSmallScreen="6"
+								>
+								<Division
+									Class="kpi kpi-orange"
+									HtmlDiv="True"
+									ID="div-KPI"
+									>
+									<ResponsiveRow
+										CollisionBehavior="Overlap"
+										>
+										<ResponsiveColumn
+											ColspanExtraSmallScreen="12"
+											ColspanLargeScreen="9"
+											ColspanMediumScreen="9"
+											ColspanSmallScreen="12"
+											>
+											<Label
+												Caption="@Local.rdCrosstabValue-1~"
+												Class="kpi-value"
+												Format="###,###,##0"
+												Tooltip="Total Chemical Acres"
+											/>
+											<Label
+												Caption="Chemical Acres"
+												Class="kpi-label"
+											/>
+										</ResponsiveColumn>
+										<ResponsiveColumn>
+											<Label/>
+										</ResponsiveColumn>
+									</ResponsiveRow>
+								</Division>
+							</ResponsiveColumn>
+							<ResponsiveColumn
+								ColspanExtraSmallScreen="6"
+								ColspanLargeScreen="3"
+								ColspanMediumScreen="3"
+								ColspanSmallScreen="6"
+								>
+								<Division
+									Class="kpi kpi-red"
+									HtmlDiv="True"
+									ID="div-KPI"
+									>
+									<ResponsiveRow
+										CollisionBehavior="Overlap"
+										>
+										<ResponsiveColumn
+											ColspanExtraSmallScreen="12"
+											ColspanLargeScreen="9"
+											ColspanMediumScreen="9"
+											ColspanSmallScreen="12"
+											>
+											<Label
+												Caption="@Local.rdCrosstabValue-0~"
+												Class="kpi-value"
+												Format="###,###,##0"
+												Tooltip="Total Application Acres"
+											/>
+											<Label
+												Caption="Application Acres"
+												Class="kpi-label"
+											/>
+										</ResponsiveColumn>
+										<ResponsiveColumn>
+											<Label/>
+										</ResponsiveColumn>
+									</ResponsiveRow>
+								</Division>
+							</ResponsiveColumn>
+							<ResponsiveColumn
+								ColspanExtraSmallScreen="6"
+								ColspanLargeScreen="3"
+								ColspanMediumScreen="3"
+								ColspanSmallScreen="6"
+								>
+								<Division
+									Class="kpi kpi-purple"
+									HtmlDiv="True"
+									ID="div-KPI"
+									>
+									<ResponsiveRow
+										CollisionBehavior="Overlap"
+										>
+										<ResponsiveColumn
+											ColspanExtraSmallScreen="12"
+											ColspanLargeScreen="9"
+											ColspanMediumScreen="9"
+											ColspanSmallScreen="12"
+											>
+											<Label
+												Caption="@Local.rdCrosstabValue-2~"
+												Class="kpi-value"
+												Format="###,###,##0"
+												Tooltip="Total Fertilizer Acres"
+											/>
+											<Label
+												Caption="Fertilizer Acres"
+												Class="kpi-label"
+											/>
+										</ResponsiveColumn>
+										<ResponsiveColumn>
+											<Label/>
+										</ResponsiveColumn>
+									</ResponsiveRow>
+								</Division>
+							</ResponsiveColumn>
+							<ResponsiveColumn
+								ColspanExtraSmallScreen="6"
+								ColspanLargeScreen="3"
+								ColspanMediumScreen="3"
+								ColspanSmallScreen="6"
+								>
+								<Division
+									Class="kpi kpi-green"
+									HtmlDiv="True"
+									ID="div-KPI"
+									>
+									<ResponsiveRow
+										CollisionBehavior="Overlap"
+										>
+										<ResponsiveColumn
+											ColspanExtraSmallScreen="12"
+											ColspanLargeScreen="9"
+											ColspanMediumScreen="9"
+											ColspanSmallScreen="12"
+											>
+											<Label
+												Caption="@Local.rdCrosstabValue-3~"
+												Class="kpi-value"
+												Format="###,###,##0"
+												Tooltip="Total Seed Acres"
+											/>
+											<Label
+												Caption="Seed Acres"
+												Class="kpi-label"
+											/>
+										</ResponsiveColumn>
+										<ResponsiveColumn>
+											<Label
+												Class="down-arrow"
+											/>
+										</ResponsiveColumn>
+									</ResponsiveRow>
+								</Division>
+							</ResponsiveColumn>
+						</ResponsiveRow>
+						<ResponsiveRow
+							Class="ThemeTextSmall"
+							CollisionBehavior="Wrap"
+							>
+							<ResponsiveColumn
+								Class="ThemeAlignCenter"
+								ColspanExtraSmallScreen="12"
+								ColspanLargeScreen="6"
+								ColspanMediumScreen="6"
+								ColspanSmallScreen="6"
+								>
+								<Division
+									Class="ThemeAlignCenter"
+									ID="panel-visualization1-title"
+									>
+									<Label
+										Caption="Total Acres By Crop Year"
+										Class="ThemeTextSmall,ThemeBold"
+									/>
+									<LineBreak/>
+								</Division>
+								<Division
+									Class="well"
+									HtmlDiv="True"
+									ID="panel-visualization1"
+									>
+									<Note
+										Note="&lt;!--Insert visualization here--&gt;"
+									/>
+									<ChartCanvas
+										ChartWidth="95%"
+										>
+										<Series
+											ChartXDataColumn="CropYear"
+											ChartXDataColumnType="Text"
+											ChartYDataColumn="TotalAcres"
+											Type="Bar"
+										/>
+										<DataLayer
+											ConnectionID="connCRMData"
+											ID="dlTotalAcresByYear"
+											Source="SELECT CropYear, SUM(Acres) AS TotalAcres
+FROM mkcCropForecastAcres
+WHERE ProdRptCatDesc = &apos;Seed&apos; And AccountId = &apos;@Request.CRMAccount~&apos;
+GROUP BY CropYear
+"
+											Type="SQL"
+											>
+											<ConditionFilter
+												Condition="@Data.CropYear~ &gt; @Data.CropYear~ - 5"
+											/>
+										</DataLayer>
+									</ChartCanvas>
+								</Division>
+							</ResponsiveColumn>
+							<ResponsiveColumn
+								Class="ThemeAlignCenter"
+								ColspanExtraSmallScreen="12"
+								ColspanLargeScreen="6"
+								ColspanMediumScreen="6"
+								ColspanSmallScreen="6"
+								>
+								<Division
+									ID="panel-visualization2-title"
+									>
+									<Label
+										Caption="Total Crop Acres By Year"
+										Class="ThemeTextSmall,ThemeBold"
+									/>
+									<LineBreak/>
+								</Division>
+								<Division
+									Class="well"
+									HtmlDiv="True"
+									ID="panel-visualization2"
+									>
+									<Note
+										Note="&lt;!--Insert visualization here--&gt;"
+									/>
+									<ChartCanvas
+										ChartWidth="95%"
+										NoDataCaption="Default"
+										>
+										<Series
+											ChartXDataColumn="CropYear"
+											ChartXDataColumnType="Text"
+											ChartYDataColumn="rdCrosstabValue"
+											Type="Bar"
+										/>
+										<DataLayer
+											ConnectionID="connCRMData"
+											ID="dlTotalCropByAcreByYear"
+											Source="SELECT CropName, CropYear, Acres
+FROM mkcCropForecastAcres
+WHERE ProdRptCatDesc = &apos;Seed&apos; And AccountId = &apos;@Request.CRMAccount~&apos;
+"
+											Type="SQL"
+											>
+											<CrosstabFilter
+												CrosstabColumn="CropName"
+												CrosstabLabelColumn="CropYear"
+												CrosstabValueColumn="Acres"
+												CrosstabValueFunction="Sum"
+											/>
+										</DataLayer>
+									</ChartCanvas>
+								</Division>
+							</ResponsiveColumn>
+						</ResponsiveRow>
+						<InputText
+							Class="hidden"
+							DefaultValue="@Local.cYear~"
+							ID="iptYear"
+						/>
+						<InputText
+							Class="hidden"
+							ID="iptCropYear"
+						/>
+						<InputText
+							Class="hidden"
+							DefaultValue="@Local.cMonth~"
+							ID="iptMonth"
+						/>
+					</Division>
+				</Division>
+			</ResponsiveColumn>
+		</ResponsiveRow>
+		<ResponsiveRow>
+			<Note
+				Note="&lt;!--Show drill thru tabs at bottom of page--&gt;"
+			/>
+			<ResponsiveColumn
+				ColspanExtraSmallScreen="12"
+				ColspanLargeScreen="12"
+				ColspanMediumScreen="12"
+				ColspanSmallScreen="12"
+				>
+				<Division
+					ID="panel-details1"
+					>
+					<Note
+						Note="&lt;!--set conditions for showing the drill thru--&gt;"
+					/>
+					<Tabs
+						DefaultTab="tbDetail"
+						ID="tabDrillThru1"
+						>
+						<TabPanel
+							Caption="Crop Year Details"
+							Class="ThemeTextSmall"
+							ID="tbDetail1"
+							>
+							<Division
+								Class="panel panel-default"
+								HtmlDiv="True"
+								ID="panel-detail-default"
+								>
+								<Division
+									Class="panel-body"
+									HtmlDiv="True"
+									ID="panel-detail-body"
+									>
+									<Division
+										Class="ThemeTextSmall"
+										HtmlDiv="True"
+										ID="panel-data"
+										>
+										<ResponsiveRow>
+											<ResponsiveColumn
+												ColspanExtraSmallScreen="12"
+												ColspanLargeScreen="12"
+												ColspanMediumScreen="12"
+												ColspanSmallScreen="12"
+												>
+												<ResponsiveRow>
+													<ResponsiveColumn
+														ColspanExtraSmallScreen="6"
+														ColspanLargeScreen="4"
+														ColspanMediumScreen="4"
+														ColspanSmallScreen="6"
+														>
+														<Rows
+															Width="100"
+															WidthScale="%"
+															>
+															<Row>
+																<Column
+																	Width="20"
+																	WidthScale="%"
+																	>
+																	<Label
+																		Caption="Crop Year:"
+																		Class="ThemeBold"
+																	/>
+																	<LineBreak/>
+																</Column>
+																<Column
+																	Class="ThemeAlignTopLeft"
+																	Width="30"
+																	WidthScale="%"
+																	>
+																	<InputSelectList
+																		DefaultValue="@Request.iptCropYear~"
+																		ID="selCropYear"
+																		OptionCaptionColumn="CropYear"
+																		OptionValueColumn="CropYear"
+																		>
+																		<DataLayer
+																			ConnectionID="connCRMData"
+																			ID="dlCropYear"
+																			Source="Select Distinct mkcCropForecastAcres.CropYear
+From mkcCropForecastAcres 
+Order By CropYear DESC"
+																			Type="SQL"
+																			>
+																			<ConditionFilter
+																				Condition="@Data.CropYear~ &gt; @Data.CropYear~ - 5 "
+																			/>
+																		</DataLayer>
+																		<EventHandler
+																			DhtmlEvent="onchange"
+																			>
+																			<Action
+																				ElementID="dtCropYearAcres"
+																				ID="actRefCropYearAcres"
+																				Type="RefreshElement"
+																				>
+																				<LinkParams
+																					CropYear="@Request.selCropYear~"
+																				/>
+																				<WaitPage/>
+																			</Action>
+																		</EventHandler>
+																	</InputSelectList>
+																	<LineBreak/>
+																</Column>
+																<Column
+																	Class="ThemeAlignTopRight"
+																	Width="40"
+																	WidthScale="%"
+																	>
+																	<Button
+																		Caption="Add"
+																		Class="btn btn-default"
+																		ID="btnAdd"
+																		>
+																		<Remark>
+																			<Action
+																				ElementID="panelAddAcres"
+																				FeedbackShowElementID="panelAddAcres"
+																				ID="actRefEditPanel"
+																				Type="RefreshElement"
+																				>
+																				<WaitPage/>
+																				<LinkParams
+																					AccountId="@Local.AccountId~"
+																					CropYear="@Request.iptCropYear~"
+																					Maint="Add"
+																				/>
+																			</Action>
+																		</Remark>
+																		<Action
+																			ElementID="panelAddAcres"
+																			ID="showAddPanel"
+																			Type="ShowElement"
+																		/>
+																	</Button>
+																	<LineBreak/>
+																</Column>
+															</Row>
+														</Rows>
+													</ResponsiveColumn>
+													<ResponsiveColumn
+														Class="ThemeAlignRight"
+														>
+														<Division
+															HtmlDiv="True"
+															ID="divAdd"
+														/>
+													</ResponsiveColumn>
+												</ResponsiveRow>
+												<ResponsiveRow>
+													<ResponsiveColumn
+														ColspanExtraSmallScreen="12"
+														ColspanLargeScreen="12"
+														ColspanMediumScreen="12"
+														ColspanSmallScreen="12"
+														>
+														<Label
+															Caption="@Request.StatusMsg~"
+															ID="lblStatus"
+															>
+															<Note
+																Note="&lt;!--set conditions on showing a status message--&gt;"
+															/>
+															<ConditionalClass
+																Class="ThemeErrorText"
+																Condition="InStr(&quot;@Request.StatusMsg~&quot;,&quot;Error:&quot;) &gt; 0"
+															/>
+															<ConditionalClass
+																Class="ThemeTextNegative"
+																Condition="InStr(&quot;@Request.StatusMsg~&quot;,&quot;Success:&quot;) &gt; 0"
+															/>
+														</Label>
+													</ResponsiveColumn>
+												</ResponsiveRow>
+												<ResponsiveRow>
+													<ResponsiveColumn
+														ColspanExtraSmallScreen="12"
+														ColspanLargeScreen="12"
+														ColspanMediumScreen="12"
+														ColspanSmallScreen="12"
+														>
+														<DataTable
+															ID="dtCropYearAcres"
+															>
+															<DataLayer
+																ConnectionID="connCRMData"
+																ID="dlCropYearAcres"
+																Source="Select mkcCropForecastAcres.AccountId,
+  mkcCropForecastAcres.CropYear,
+  mkcCropForecastAcres.CropName,
+  mkcCropForecastAcres.CropType,
+  mkcCropForecastAcres.Acres
+From mkcCropForecastAcres
+Where mkcCropForecastAcres.ProdRptCatDesc = &apos;Seed&apos; And
+  mkcCropForecastAcres.AccountId = &apos;@Request.CRMAccount~&apos; And
+ (mkcCropForecastAcres.CropYear = &apos;@Request.selCropYear~&apos; Or
+    mkcCropForecastAcres.CropYear = Year(GetDate()))
+Group By mkcCropForecastAcres.AccountId,
+  mkcCropForecastAcres.CropYear,
+  mkcCropForecastAcres.CropName,
+  mkcCropForecastAcres.CropType,
+  mkcCropForecastAcres.Acres"
+																Type="SQL"
+															/>
+															<Remark>
+																<AutoColumns/>
+															</Remark>
+															<DataTableColumn
+																ID="colEdit"
+																>
+																<Label
+																	Class="fa fa-edit fa-2x "
+																	Tooltip="Toggle edit crop acres"
+																	>
+																	<Action
+																		Display="Toggle"
+																		ElementID="miEditPanel"
+																		ID="showEditPanel"
+																		Type="ShowElement"
+																	/>
+																</Label>
+															</DataTableColumn>
+															<MoreInfoRow
+																ID="miEditPanel"
+																ShowModes="None"
+																>
+																<Rows
+																	Width="95"
+																	WidthScale="%"
+																	>
+																	<Row>
+																		<Column
+																			ColSpan="5"
+																			>
+																			<Label
+																				Caption="Edit Customer Acres"
+																				Class="panel-title ThemeBold"
+																			/>
+																			<HR/>
+																		</Column>
+																	</Row>
+																	<Row>
+																		<Column
+																			Width="10"
+																			WidthScale="%"
+																			>
+																			<Label
+																				Caption="Crop Acres: "
+																				Class="bold"
+																			/>
+																		</Column>
+																		<Column
+																			Width="15"
+																			WidthScale="%"
+																			>
+																			<InputText
+																				Class="ThemeAlignRight"
+																				DefaultValue="@Data.Acres~"
+																				Format="General Number"
+																				ID="iptAcres"
+																				Tooltip="Enter the number of acres"
+																				>
+																				<Validation
+																					Class="ThemeErrorText"
+																					ErrorMsg="Acres is required."
+																					Type="Required"
+																				/>
+																			</InputText>
+																		</Column>
+																		<Column
+																			Width="5"
+																			WidthScale="%"
+																			>
+																			<Spaces
+																				Size="5"
+																			/>
+																		</Column>
+																		<Column
+																			Width="10"
+																			WidthScale="%"
+																			>
+																			<Button
+																				Caption="Save"
+																				ID="btnEdit"
+																				>
+																				<Action
+																					ID="procUpdate"
+																					Process="SQLTasks"
+																					TaskID="updateRow"
+																					Type="Process"
+																					>
+																					<WaitPage/>
+																					<LinkParams/>
+																				</Action>
+																			</Button>
+																		</Column>
+																		<Column
+																			Width="10"
+																			WidthScale="%"
+																			>
+																			<Button
+																				Caption="Cancel"
+																				ID="btnCancel"
+																				>
+																				<Action
+																					ConfirmMessage="Changes will be lost. Continue without saving?"
+																					ElementID="panel-data"
+																					FeedbackHideElementID="miEditPanel"
+																					ID="refElementonCancel"
+																					Type="RefreshElement"
+																					>
+																					<WaitPage/>
+																				</Action>
+																			</Button>
+																		</Column>
+																		<Column
+																			Width="50"
+																			WidthScale="%"
+																			>
+																			<Spaces
+																				Size="15"
+																			/>
+																		</Column>
+																	</Row>
+																</Rows>
+															</MoreInfoRow>
+															<DataTableColumn
+																Header="Crop Name"
+																ID="colCrop"
+																>
+																<Label
+																	Caption="@Data.CropName~"
+																/>
+															</DataTableColumn>
+															<DataTableColumn
+																Header="Crop Type"
+																ID="colType"
+																>
+																<Label
+																	Caption="@Data.CropType~"
+																/>
+															</DataTableColumn>
+															<DataTableColumn
+																Header="Acres"
+																ID="colAcres"
+																>
+																<Label
+																	Caption="@Data.Acres~"
+																/>
+															</DataTableColumn>
+														</DataTable>
+													</ResponsiveColumn>
+												</ResponsiveRow>
+											</ResponsiveColumn>
+										</ResponsiveRow>
+									</Division>
+								</Division>
+							</Division>
+						</TabPanel>
+					</Tabs>
+				</Division>
+			</ResponsiveColumn>
+		</ResponsiveRow>
+		<IncludeScript
+			IncludedScript="&lt;script&gt;
+$(document).ready(function(){
+    month = document.getElementById(&apos;iptMonth&apos;).value;
+	year = document.getElementById(&apos;iptYear&apos;).value;
+	txtCropYear = document.getElementById(&apos;iptCropYear&apos;);
+	if (month &gt; 8) {
+		year = year + 1;
+		txtCropYear.value = year;
+	}
+	else {
+		txtCropYear.value = year;
+	}
+	
+});
+&lt;/script&gt;"
+		/>
+	</Body>
+	<ideTestParams
+		Acres=""
+		CRMAccount="86aa5600-c7d0-e511-9401-00505685e8fa"
+		CropName=""
+		CropType=""
+		iptCropYear=""
+		selCropYear=""
+		StatusMsg=""
+	/>
+</Report>

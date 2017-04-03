@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Setting
+	ID="_settings"
+	>
+	<GlobalCSS
+		ID="Theme-MKC-Accelerate"
+		Theme="MKC-Accelerate"
+	/>
+	<Application
+		Caption="Customer Acres and Crop Year Totals"
+	/>
+	<Path
+		AppPath="http://localhost/MKCEmbedApp"
+	/>
+	<General
+		rdDebuggerStyle="DebuggerLinks"
+		RepoFriendly="True"
+		ScriptingLanguage="JavaScript"
+	/>
+	<Connections>
+		<Connection
+			ID="connCRMData"
+			SqlServer="SCSQLSVR\SCCM1"
+			SqlServerDatabase="mkctest_MSCRM"
+			SqlServerPassword="integr8!"
+			SqlServerPort=""
+			SqlServerUser="BIOperations"
+			Type="SqlServer"
+		/>
+	</Connections>
+	<TeamDevelopment/>
+</Setting>

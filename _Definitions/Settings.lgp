@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <CollapsedDef>
+    <File Name="C:\inetpub\wwwroot\MKCEmbedApp\_Definitions\_Reports\Default.lgx">
+      <Element Key="2\0\0" />
+      <Element Key="2\0\0\0\0\1\1" />
+      <Element Key="2\0\0\0\0\1\2" />
+      <Element Key="2\0\0\0\0\1\3" />
+      <Element Key="2\0\0\0\0\1\4\0" />
+      <Element Key="2\1\0\0" />
+      <Element Key="2\1\0\0\0" />
+      <Element Key="2\2\1\0\1\0\0\0\0\0\0\2\0\0\3\0" />
+    </File>
+  </CollapsedDef>
+</Settings>

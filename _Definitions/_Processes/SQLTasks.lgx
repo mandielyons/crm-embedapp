@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Process
+	ID="SQLTasks"
+	>
+	<DefaultRequestParams/>
+	<Task
+		ID="updateRow"
+		>
+		<Procedure
+			ConnectionID="connCRMData"
+			ID="procUpdateRow"
+			SqlCommand="UPDATE mkcCropForecastAcres SET Acres = &apos;@Request.iptAcres~&apos;
+WHERE CropYear = &apos;@Request.iptCropYear~&apos; AND ProdRptCatDesc = &apos;Seed&apos; AND AccountId = &apos;86aa5600-c7d0-e511-9401-00505685e8fa&apos; AND CropType = &apos;@Request.selCropType~&apos; AND CropName = &apos;@Request.selCropName~&apos; 
+"
+			Type="SQL"
+			>
+			<IfError
+				ID="UpdateRowError"
+				>
+				<Procedure
+					Expression="@Procedure.procUpdateRow.ErrorMessage~.Length &gt; 0"
+					ID="procUpdateRowError"
+					Type="If"
+					>
+					<Response
+						Type="Report"
+						>
+						<Target
+							Report="Default"
+							Type="Report"
+							>
+							<WaitPage/>
+						</Target>
+						<LinkParams
+							StatusMsg="Error: @Procedure.procUpdateRowError.ErrorMessage~"
+						/>
+					</Response>
+				</Procedure>
+			</IfError>
+		</Procedure>
+		<Response
+			Type="Report"
+			>
+			<Target
+				Report="Default"
+				Type="Report"
+				>
+				<WaitPage/>
+			</Target>
+			<LinkParams
+				StatusMsg="Success: Record updated."
+			/>
+		</Response>
+	</Task>
+	<Task
+		ID="insertRow"
+		>
+		<Procedure
+			ConnectionID="connCRMData"
+			ID="procInsertRow"
+			SqlCommand="INSERT INTO mkcCropForecastAcres (AccountId,CropYear,CropName,CropType,Acres,ProdRptCatDesc)
+VALUES (&apos;@Request.iptAccountId~&apos;,&apos;@Request.iptCropYear~&apos;,&apos;@Request.selCropName~&apos;,&apos;@Request.selCropType~&apos;,&apos;@Request.iptAcres~&apos;,&apos;Seed&apos;)
+"
+			SqlReturnType="RowsAffected"
+			Type="SQL"
+			>
+			<IfError
+				ID="InsertRowError"
+				>
+				<Procedure
+					Expression="@Procedure.procInsertRow.ErrorMessage~.Length &gt; 0"
+					ID="procInsertRowError"
+					Type="If"
+					>
+					<Response
+						Type="Report"
+						>
+						<Target
+							Report="Default"
+							Type="Report"
+							>
+							<WaitPage/>
+						</Target>
+						<LinkParams
+							StatusMsg="Error: @Procedure.procInsertRowError.ErrorMessage~"
+						/>
+					</Response>
+				</Procedure>
+			</IfError>
+		</Procedure>
+		<Response
+			Type="Report"
+			>
+			<Target
+				Report="Default"
+				Type="Report"
+				>
+				<WaitPage/>
+			</Target>
+			<LinkParams
+				StatusMsg="Success: Record added."
+			/>
+		</Response>
+	</Task>
+	<ideTestParams
+		iptAccountId=""
+		iptAcres=""
+		iptCropYear=""
+		rdTaskID=""
+		selCropName=""
+		selCropType=""
+	/>
+</Process>
